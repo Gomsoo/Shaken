@@ -77,6 +77,10 @@ gradlePlugin {
             id = "shaken.android.test"
             implementationClass = "AndroidTestConventionPlugin"
         }
+        register("hilt") {
+            id = "shaken.hilt"
+            implementationClass = "HiltConventionPlugin"
+        }
         register("jvmLibrary") {
             id = "shaken.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"

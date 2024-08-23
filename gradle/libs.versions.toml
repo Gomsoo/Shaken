@@ -9,9 +9,11 @@ activityCompose = "1.9.1"
 composeBom = "2024.08.00"
 androidxLifecycle = "2.8.4"
 androidxNavigation = "2.7.7"
+androidxHiltNavigationCompose = "1.2.0"
 ksp = "2.0.10-1.0.24"
 truth = "1.4.2"
 dependencyGuard = "0.5.0"
+hilt = "2.51.1"
 secrets = "2.0.1"
 
 [libraries]
@@ -29,6 +31,11 @@ androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "life
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
+androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
+hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 
 # Dependencies of the included build-logic
@@ -47,6 +54,7 @@ compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependencyGuard" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 
@@ -57,4 +65,5 @@ shaken-android-library-compose = { id = "shaken.android.library.compose", versio
 shaken-android-library = { id = "shaken.android.library", version = "unspecified" }
 shaken-android-feature = { id = "shaken.android.feature", version = "unspecified" }
 shaken-android-test = { id = "shaken.android.test", version = "unspecified" }
+shaken-hilt = { id = "shaken.hilt", version = "unspecified" }
 shaken-jvm-library = { id = "shaken.jvm.library", version = "unspecified" }
