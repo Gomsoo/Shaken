@@ -45,6 +45,8 @@ hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testi
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
+coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
 
 # Dependencies of the included build-logic
