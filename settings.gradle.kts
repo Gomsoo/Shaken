@@ -21,4 +21,9 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Shaken"
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":app")
+
+include(":core:designsystem")

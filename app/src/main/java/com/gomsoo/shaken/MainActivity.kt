@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.gomsoo.shaken.ui.theme.ShakenTheme
+import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
