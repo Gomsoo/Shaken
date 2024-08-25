@@ -11,8 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
-import com.gomsoo.shaken.feature.search.SearchRoute
+import com.gomsoo.shaken.navigation.ShakenNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,8 +24,10 @@ class MainActivity : ComponentActivity() {
         setContent {
             ShakenTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // TODO Navigation maybe
-                    SearchRoute(modifier = Modifier.padding(innerPadding))
+                    ShakenNavHost(
+                        navController = rememberNavController(),
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
