@@ -32,3 +32,5 @@ include(":core:data")
 include(":core:designsystem")
 include(":core:ui")
 include(":core:network")
+
+include(":feature:search")

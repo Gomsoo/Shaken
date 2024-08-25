@@ -37,6 +37,8 @@ android {
 dependencies {
     implementation(projects.core.designsystem)
 
+    implementation(projects.feature.search)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.hilt.navigation.compose)

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_search_initial_emoji">⭐️</string>
+    <string name="feature_search_initial_message">Search for a Cocktail!</string>
+    <string name="feature_search_empty_emoji">⛄️</string>
+    <string name="feature_search_empty_message">There is no results!</string>
+</resources>

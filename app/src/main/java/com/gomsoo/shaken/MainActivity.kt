@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
+import com.gomsoo.shaken.feature.search.SearchRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -22,10 +23,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             ShakenTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    // TODO Navigation maybe
+                    SearchRoute(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
