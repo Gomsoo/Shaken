@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.gomsoo.shaken.feature.detail.navigation.detailScreen
+import com.gomsoo.shaken.feature.detail.navigation.navigateToDetail
 import com.gomsoo.shaken.feature.search.navigation.SEARCH_ROUTE
 import com.gomsoo.shaken.feature.search.navigation.searchScreen
 
@@ -18,6 +20,7 @@ fun ShakenNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        searchScreen()
+        searchScreen(onItemClick = navController::navigateToDetail)
+        detailScreen()
     }
 }

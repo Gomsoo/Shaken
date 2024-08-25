@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.core.designsystem)
 
     implementation(projects.feature.search)
+    implementation(projects.feature.detail)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)

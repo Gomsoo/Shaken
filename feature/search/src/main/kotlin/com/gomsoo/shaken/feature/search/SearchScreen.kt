@@ -1,5 +1,6 @@
 package com.gomsoo.shaken.feature.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,29 +22,35 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
-import com.gomsoo.shaken.core.model.data.Cocktail
+import com.gomsoo.shaken.core.model.data.SimpleCocktail
 
 @Composable
 fun SearchRoute(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
+    onItemClick: (String) -> Unit
 ) {
     val searchUiState by viewModel.searchUiState.collectAsStateWithLifecycle()
-    SearchScreen(searchUiState, modifier, viewModel::setKeyword)
+    SearchScreen(searchUiState, modifier, viewModel::setKeyword, onItemClick)
 }
 
 @Composable
 internal fun SearchScreen(
     searchUiState: SearchUiState,
     modifier: Modifier = Modifier,
-    onInputTextChange: (String) -> Unit
+    onInputTextChange: (String) -> Unit,
+    onItemClick: (String) -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
             when (searchUiState) {
                 is SearchUiState.Initial -> InitialState(modifier)
                 is SearchUiState.Empty -> EmptyState(modifier)
-                is SearchUiState.Success -> Cocktails(searchUiState.cocktails, modifier)
+                is SearchUiState.Success -> Cocktails(
+                    cocktails = searchUiState.cocktails,
+                    modifier = modifier,
+                    onItemClick = onItemClick
+                )
             }
         }
 
@@ -92,11 +99,17 @@ private fun EmptyState(modifier: Modifier = Modifier) {
  * TODO Change to Grid?
  */
 @Composable
-private fun Cocktails(cocktails: List<Cocktail>, modifier: Modifier = Modifier) {
+private fun Cocktails(
+    cocktails: List<SimpleCocktail>,
+    modifier: Modifier = Modifier,
+    onItemClick: (String) -> Unit
+) {
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn {
             items(items = cocktails, key = { item -> item.id }) { item ->
-                Text(text = item.name, modifier = Modifier.padding(16.dp))
+                Box(modifier = modifier.clickable { onItemClick(item.id) }) {
+                    Text(text = item.name, modifier = Modifier.padding(16.dp))
+                }
             }
         }
     }
@@ -122,9 +135,9 @@ private fun EmptyStatePreview() {
 @Composable
 private fun CocktailsPreview(
     @PreviewParameter(CocktailsPreviewParameterProvider::class)
-    cocktails: List<Cocktail>
+    cocktails: List<SimpleCocktail>
 ) {
     ShakenTheme {
-        Cocktails(cocktails = cocktails)
+        Cocktails(cocktails = cocktails, onItemClick = {})
     }
 }

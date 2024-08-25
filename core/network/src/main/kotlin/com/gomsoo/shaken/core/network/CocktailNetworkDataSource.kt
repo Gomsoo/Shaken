@@ -4,4 +4,5 @@ import com.gomsoo.shaken.core.network.model.NetworkCocktail
 
 interface CocktailNetworkDataSource {
     suspend fun search(keyword: String): List<NetworkCocktail>
+    suspend fun getCocktail(id: String): NetworkCocktail?
 }

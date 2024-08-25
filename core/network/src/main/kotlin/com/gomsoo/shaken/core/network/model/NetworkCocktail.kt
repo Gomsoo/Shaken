@@ -1,16 +1,131 @@
 package com.gomsoo.shaken.core.network.model
 
 import com.gomsoo.shaken.core.model.data.Cocktail
+import com.gomsoo.shaken.core.model.data.SimpleCocktail
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class NetworkCocktail(
     @SerialName("idDrink") val id: String,
-    @SerialName("strDrink") val name: String
+    @SerialName("strDrink") val name: String,
+    @SerialName("strDrinkThumb") val thumbnailUrl: String?,
+    @SerialName("strCategory") val category: String?,
+    @SerialName("strAlcoholic") val alcoholic: String?,
+    @SerialName("strGlass") val glass: String?,
+    @SerialName("strTags") val tags: String?,
+    @SerialName("strIngredient1") val ingredient1: String?,
+    @SerialName("strIngredient2") val ingredient2: String?,
+    @SerialName("strIngredient3") val ingredient3: String?,
+    @SerialName("strIngredient4") val ingredient4: String?,
+    @SerialName("strIngredient5") val ingredient5: String?,
+    @SerialName("strIngredient6") val ingredient6: String?,
+    @SerialName("strIngredient7") val ingredient7: String?,
+    @SerialName("strIngredient8") val ingredient8: String?,
+    @SerialName("strIngredient9") val ingredient9: String?,
+    @SerialName("strIngredient10") val ingredient10: String?,
+    @SerialName("strIngredient11") val ingredient11: String?,
+    @SerialName("strIngredient12") val ingredient12: String?,
+    @SerialName("strIngredient13") val ingredient13: String?,
+    @SerialName("strIngredient14") val ingredient14: String?,
+    @SerialName("strIngredient15") val ingredient15: String?,
+    @SerialName("strMeasure1") val measure1: String?,
+    @SerialName("strMeasure2") val measure2: String?,
+    @SerialName("strMeasure3") val measure3: String?,
+    @SerialName("strMeasure4") val measure4: String?,
+    @SerialName("strMeasure5") val measure5: String?,
+    @SerialName("strMeasure6") val measure6: String?,
+    @SerialName("strMeasure7") val measure7: String?,
+    @SerialName("strMeasure8") val measure8: String?,
+    @SerialName("strMeasure9") val measure9: String?,
+    @SerialName("strMeasure10") val measure10: String?,
+    @SerialName("strMeasure11") val measure11: String?,
+    @SerialName("strMeasure12") val measure12: String?,
+    @SerialName("strMeasure13") val measure13: String?,
+    @SerialName("strMeasure14") val measure14: String?,
+    @SerialName("strMeasure15") val measure15: String?,
+    @SerialName("strInstructions") val instructions: String?,
+    @SerialName("strInstructionsES") val instructionsES: String?,
+    @SerialName("strInstructionsDE") val instructionsDE: String?,
+    @SerialName("strInstructionsFR") val instructionsFR: String?,
+    @SerialName("strInstructionsIT") val instructionsIT: String?,
+    @SerialName("strInstructionsZH-HANS") val instructionsZHHANS: String?,
+    @SerialName("strInstructionsZH-HANT") val instructionsZHHANT: String?,
+    @SerialName("strImageSource") val imageSource: String?,
+    @SerialName("strImageAttribution") val imageAttribution: String?,
+    @SerialName("strCreativeCommonsConfirmed") val creativeCommonsConfirmed: String?,
+    @SerialName("dateModified") val updatedAt: String?
 )
 
-fun NetworkCocktail.asModel(): Cocktail = Cocktail(id, name)
+fun NetworkCocktail.asSimpleModel(): SimpleCocktail = SimpleCocktail(id, name)
+
+fun NetworkCocktail.asModel(): Cocktail = Cocktail(
+    id = id,
+    name = name,
+    thumbnailUrl = thumbnailUrl,
+    category = category,
+    alcoholic = alcoholic,
+    glass = glass,
+    tags = tags?.split(",")?.map { it.trim() } ?: emptyList(),
+    ingredients = formattedIngredients(),
+    instructions = listOfNotNull(
+        instructions?.let { "EN" to it },
+        instructionsES?.let { "ES" to it },
+        instructionsDE?.let { "DE" to it },
+        instructionsFR?.let { "FR" to it },
+        instructionsIT?.let { "IT" to it },
+        instructionsZHHANS?.let { "ZH-HANS" to it },
+        instructionsZHHANT?.let { "ZH-HANT" to it }
+    ).toMap(),
+    imageSource = imageSource,
+    imageAttribution = imageAttribution,
+    creativeCommonsConfirmed = creativeCommonsConfirmed,
+    updatedAt = updatedAt
+)
+
+private fun NetworkCocktail.formattedIngredients(): List<String> = measures.zip(ingredients)
+    .mapNotNull { (measure, ingredient) ->
+        ingredient.takeUnless { it.isNullOrBlank() }
+            ?.let { "${measure?.trim()?.let { "$it " } ?: ""}$ingredient" }
+    }
+
+private val NetworkCocktail.measures
+    get() = listOf(
+        measure1,
+        measure2,
+        measure3,
+        measure4,
+        measure5,
+        measure6,
+        measure7,
+        measure8,
+        measure9,
+        measure10,
+        measure11,
+        measure12,
+        measure13,
+        measure14,
+        measure15
+    )
+
+private val NetworkCocktail.ingredients
+    get() = listOf(
+        ingredient1,
+        ingredient2,
+        ingredient3,
+        ingredient4,
+        ingredient5,
+        ingredient6,
+        ingredient7,
+        ingredient8,
+        ingredient9,
+        ingredient10,
+        ingredient11,
+        ingredient12,
+        ingredient13,
+        ingredient14,
+        ingredient15
+    )
 
 data class FullNetworkCocktail(
     @SerialName("idDrink") val idDrink: String, // 17222

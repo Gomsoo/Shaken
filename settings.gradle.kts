@@ -34,3 +34,4 @@ include(":core:ui")
 include(":core:network")
 
 include(":feature:search")
+include(":feature:detail")
