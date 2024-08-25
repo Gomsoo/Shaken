@@ -4,4 +4,5 @@
     <string name="feature_search_initial_message">Search for a Cocktail!</string>
     <string name="feature_search_empty_emoji">⛄️</string>
     <string name="feature_search_empty_message">There is no results!</string>
+    <string name="feature_search_input_placeholder">Search cocktails…</string>
 </resources>

@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Serializable
 internal data class SearchResponse(
-    val drinks: List<NetworkCocktail>,
+    val drinks: List<NetworkCocktail>?,
 )
 
 private interface CocktailNetworkApi {
@@ -29,5 +29,5 @@ internal class CocktailRetrofit @Inject constructor(
     private val service = retrofit.create<CocktailNetworkApi>()
 
     override suspend fun search(keyword: String): List<NetworkCocktail> =
-        service.search(keyword).drinks
+        service.search(keyword).drinks ?: emptyList()
 }
