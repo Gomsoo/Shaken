@@ -29,6 +29,9 @@ private interface CocktailNetworkApi {
     @GET("search.php")
     suspend fun search(@Query("s") keyword: String): CocktailResponse<NetworkCocktail>
 
+    @GET("search.php")
+    suspend fun searchStartWith(@Query("f") keyword: String): CocktailResponse<NetworkCocktail>
+
     @GET("lookup.php")
     suspend fun lookup(@Query("i") id: String): CocktailResponse<NetworkCocktail>
 }
@@ -45,6 +48,14 @@ internal class CocktailRetrofit @Inject constructor(
 
     override suspend fun search(keyword: String): List<NetworkCocktail> =
         service.search(keyword).drinks ?: emptyList()
+
+    /**
+     * 해당 API로 시작'단어' 검색이 불가능. 시작 알파벳으로만 검색 가능
+     */
+    override suspend fun searchStartWith(keyword: String): List<NetworkCocktail> {
+        val firstLetter = keyword.first()
+        return service.searchStartWith("$firstLetter").drinks ?: emptyList()
+    }
 
     override suspend fun getCocktail(id: String): NetworkCocktail? =
         service.lookup(id).drinks?.firstOrNull()

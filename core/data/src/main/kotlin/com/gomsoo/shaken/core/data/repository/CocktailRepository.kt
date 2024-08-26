@@ -9,5 +9,7 @@ interface CocktailRepository {
 
     suspend fun search(keyword: String): List<SimpleCocktail>
 
+    suspend fun searchStartWith(keyword: String): List<SimpleCocktail>
+
     suspend fun getDetail(id: String): Cocktail?
 }

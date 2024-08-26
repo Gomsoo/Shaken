@@ -26,6 +26,11 @@ internal class DefaultCocktailRepository @Inject constructor(
         network.search(keyword).map(NetworkCocktail::asSimpleModel)
     }
 
+    override suspend fun searchStartWith(keyword: String): List<SimpleCocktail> =
+        withContext(ioDispatcher) {
+            network.searchStartWith(keyword).map(NetworkCocktail::asSimpleModel)
+        }
+
     override suspend fun getDetail(id: String): Cocktail? = withContext(ioDispatcher) {
         network.getCocktail(id)?.asModel()
     }

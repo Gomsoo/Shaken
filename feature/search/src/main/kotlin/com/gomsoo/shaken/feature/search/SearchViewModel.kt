@@ -26,13 +26,16 @@ class SearchViewModel @Inject constructor(
         this.keyword.update { keyword }
     }
 
+    /**
+     * 시작 '단어'로 검색이 불가능하여 한 글자 이상 입력한 경우 이름 검색으로 대체
+     */
     private val searched: StateFlow<List<SimpleCocktail>> = keyword.debounce(800.milliseconds)
         .map { it.trim() }
         .map { keyword ->
-            if (keyword.isBlank()) {
-                cocktailRepository.getAlcoholics()
-            } else {
-                cocktailRepository.search(keyword)
+            when {
+                keyword.isBlank() -> cocktailRepository.getAlcoholics()
+                keyword.length == 1 -> cocktailRepository.searchStartWith(keyword)
+                else -> cocktailRepository.search(keyword)
             }
         }
         .stateIn(emptyList())
