@@ -6,6 +6,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class NetworkCocktailItem(
+    @SerialName("idDrink") val id: String,
+    @SerialName("strDrink") val name: String,
+    @SerialName("strDrinkThumb") val thumbnailUrl: String
+)
+
+fun NetworkCocktailItem.asModel(): SimpleCocktail = SimpleCocktail(id, name)
+
+@Serializable
 data class NetworkCocktail(
     @SerialName("idDrink") val id: String,
     @SerialName("strDrink") val name: String,

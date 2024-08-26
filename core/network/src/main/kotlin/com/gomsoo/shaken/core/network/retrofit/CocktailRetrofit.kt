@@ -2,6 +2,7 @@ package com.gomsoo.shaken.core.network.retrofit
 
 import com.gomsoo.shaken.core.network.CocktailNetworkDataSource
 import com.gomsoo.shaken.core.network.model.NetworkCocktail
+import com.gomsoo.shaken.core.network.model.NetworkCocktailItem
 import kotlinx.serialization.Serializable
 import retrofit2.Retrofit
 import retrofit2.create
@@ -11,15 +12,25 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Serializable
-internal data class CocktailResponse(val drinks: List<NetworkCocktail>?)
+internal data class CocktailResponse<T>(val drinks: List<T>?)
 
 private interface CocktailNetworkApi {
 
+    @GET("filter.php")
+    suspend fun filterByAlcoholic(
+        @Query("a") alcoholic: String
+    ): CocktailResponse<NetworkCocktailItem>
+
+    companion object {
+        const val QUERY_ALCOHOLIC = "Alcoholic"
+        const val QUERY_NON_ALCOHOLIC = "Non_Alcoholic"
+    }
+
     @GET("search.php")
-    suspend fun search(@Query("s") keyword: String): CocktailResponse
+    suspend fun search(@Query("s") keyword: String): CocktailResponse<NetworkCocktail>
 
     @GET("lookup.php")
-    suspend fun lookup(@Query("i") id: String): CocktailResponse
+    suspend fun lookup(@Query("i") id: String): CocktailResponse<NetworkCocktail>
 }
 
 @Singleton
@@ -28,6 +39,9 @@ internal class CocktailRetrofit @Inject constructor(
 ) : CocktailNetworkDataSource {
 
     private val service = retrofit.create<CocktailNetworkApi>()
+
+    override suspend fun getAlcoholics(): List<NetworkCocktailItem> =
+        service.filterByAlcoholic(CocktailNetworkApi.QUERY_ALCOHOLIC).drinks ?: emptyList()
 
     override suspend fun search(keyword: String): List<NetworkCocktail> =
         service.search(keyword).drinks ?: emptyList()

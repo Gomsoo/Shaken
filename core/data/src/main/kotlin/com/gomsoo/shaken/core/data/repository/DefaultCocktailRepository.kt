@@ -6,6 +6,7 @@ import com.gomsoo.shaken.core.network.CocktailNetworkDataSource
 import com.gomsoo.shaken.core.network.Dispatcher
 import com.gomsoo.shaken.core.network.ShakenDispatchers
 import com.gomsoo.shaken.core.network.model.NetworkCocktail
+import com.gomsoo.shaken.core.network.model.NetworkCocktailItem
 import com.gomsoo.shaken.core.network.model.asModel
 import com.gomsoo.shaken.core.network.model.asSimpleModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,6 +17,10 @@ internal class DefaultCocktailRepository @Inject constructor(
     private val network: CocktailNetworkDataSource,
     @Dispatcher(ShakenDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : CocktailRepository {
+
+    override suspend fun getAlcoholics(): List<SimpleCocktail> = withContext(ioDispatcher) {
+        network.getAlcoholics().map(NetworkCocktailItem::asModel)
+    }
 
     override suspend fun search(keyword: String): List<SimpleCocktail> = withContext(ioDispatcher) {
         network.search(keyword).map(NetworkCocktail::asSimpleModel)

@@ -9,7 +9,6 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import javax.inject.Inject
@@ -28,8 +27,14 @@ class SearchViewModel @Inject constructor(
     }
 
     private val searched: StateFlow<List<SimpleCocktail>> = keyword.debounce(800.milliseconds)
-        .filter(String::isNotBlank)
-        .map { cocktailRepository.search(it.trim()) }
+        .map { it.trim() }
+        .map { keyword ->
+            if (keyword.isBlank()) {
+                cocktailRepository.getAlcoholics()
+            } else {
+                cocktailRepository.search(keyword)
+            }
+        }
         .stateIn(emptyList())
 
     /**
