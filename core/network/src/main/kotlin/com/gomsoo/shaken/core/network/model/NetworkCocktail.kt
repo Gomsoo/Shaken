@@ -12,7 +12,7 @@ data class NetworkCocktailItem(
     @SerialName("strDrinkThumb") val thumbnailUrl: String
 )
 
-fun NetworkCocktailItem.asModel(): SimpleCocktail = SimpleCocktail(id, name)
+fun NetworkCocktailItem.asModel(): SimpleCocktail = SimpleCocktail(id, name, thumbnailUrl, null)
 
 @Serializable
 data class NetworkCocktail(
@@ -66,7 +66,8 @@ data class NetworkCocktail(
     @SerialName("dateModified") val updatedAt: String?
 )
 
-fun NetworkCocktail.asSimpleModel(): SimpleCocktail = SimpleCocktail(id, name)
+fun NetworkCocktail.asSimpleModel(): SimpleCocktail =
+    SimpleCocktail(id, name, thumbnailUrl, category)
 
 fun NetworkCocktail.asModel(): Cocktail = Cocktail(
     id = id,

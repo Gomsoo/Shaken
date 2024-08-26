@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 
 /**
  * TODO placeholder
@@ -12,7 +13,8 @@ import androidx.compose.ui.Modifier
 fun AsyncImage(
     imageUrl: String?,
     contentDescription: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Fit
 ) {
     Box(
         modifier = modifier,
@@ -20,7 +22,8 @@ fun AsyncImage(
     ) {
         coil.compose.AsyncImage(
             model = imageUrl,
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+            contentScale = contentScale
         )
     }
 }
