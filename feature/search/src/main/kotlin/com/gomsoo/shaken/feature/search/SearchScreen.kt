@@ -28,8 +28,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gomsoo.shaken.core.designsystem.component.AsyncImage
+import com.gomsoo.shaken.core.designsystem.component.FavoriteButton
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
-import com.gomsoo.shaken.core.model.data.SimpleCocktail
+import com.gomsoo.shaken.core.model.data.SimpleCocktailWithFavorite
 
 @Composable
 fun SearchRoute(
@@ -38,7 +39,13 @@ fun SearchRoute(
     onItemClick: (String) -> Unit
 ) {
     val searchUiState by viewModel.searchUiState.collectAsStateWithLifecycle()
-    SearchScreen(searchUiState, modifier, viewModel::setKeyword, onItemClick)
+    SearchScreen(
+        searchUiState = searchUiState,
+        modifier = modifier,
+        onInputTextChange = viewModel::setKeyword,
+        onItemClick = onItemClick,
+        onFavoriteClick = viewModel::setFavorite
+    )
 }
 
 @Composable
@@ -46,7 +53,8 @@ internal fun SearchScreen(
     searchUiState: SearchUiState,
     modifier: Modifier = Modifier,
     onInputTextChange: (String) -> Unit,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
+    onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
@@ -56,7 +64,8 @@ internal fun SearchScreen(
                 is SearchUiState.Success -> Cocktails(
                     cocktails = searchUiState.cocktails,
                     modifier = modifier,
-                    onItemClick = onItemClick
+                    onItemClick = onItemClick,
+                    onFavoriteClick = onFavoriteClick
                 )
             }
         }
@@ -107,22 +116,24 @@ private fun EmptyState(modifier: Modifier = Modifier) {
  */
 @Composable
 private fun Cocktails(
-    cocktails: List<SimpleCocktail>,
+    cocktails: List<SimpleCocktailWithFavorite>,
     modifier: Modifier = Modifier,
-    onItemClick: (String) -> Unit
+    onItemClick: (String) -> Unit,
+    onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn {
-            items(items = cocktails, key = { item -> item.id }) { item ->
+            items(items = cocktails, key = { item -> item.cocktail.id }) { item ->
+                val (cocktail, isFavorite) = item
                 Row(modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onItemClick(item.id) }
+                    .clickable { onItemClick(cocktail.id) }
                     .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AsyncImage(
-                        imageUrl = item.thumbnailUrl,
-                        contentDescription = item.name,
+                        imageUrl = cocktail.thumbnailUrl,
+                        contentDescription = cocktail.name,
                         modifier = Modifier
                             .height(48.dp)
                             .width(48.dp),
@@ -130,12 +141,13 @@ private fun Cocktails(
                     )
                     Column(
                         modifier = Modifier
+                            .weight(1f)
                             .fillMaxWidth()
                             .padding(start = 16.dp),
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = item.name, style = MaterialTheme.typography.labelLarge)
-                        item.category?.let {
+                        Text(text = cocktail.name, style = MaterialTheme.typography.labelLarge)
+                        cocktail.category?.let {
                             Text(
                                 text = it,
                                 style = MaterialTheme.typography.bodySmall,
@@ -144,6 +156,7 @@ private fun Cocktails(
                             )
                         }
                     }
+                    FavoriteButton(isSelected = isFavorite, onClick = { onFavoriteClick(item) })
                 }
             }
         }
@@ -170,9 +183,9 @@ private fun EmptyStatePreview() {
 @Composable
 private fun CocktailsPreview(
     @PreviewParameter(CocktailsPreviewParameterProvider::class)
-    cocktails: List<SimpleCocktail>
+    cocktails: List<SimpleCocktailWithFavorite>
 ) {
     ShakenTheme {
-        Cocktails(cocktails = cocktails, onItemClick = {})
+        Cocktails(cocktails = cocktails, onItemClick = {}, onFavoriteClick = {})
     }
 }

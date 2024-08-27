@@ -1,5 +1,7 @@
 package com.gomsoo.shaken.core.data.repository
 
+import com.gomsoo.shaken.core.database.dao.FavoriteCocktailDao
+import com.gomsoo.shaken.core.database.model.FavoriteCocktailEntity
 import com.gomsoo.shaken.core.model.data.Cocktail
 import com.gomsoo.shaken.core.model.data.SimpleCocktail
 import com.gomsoo.shaken.core.network.CocktailNetworkDataSource
@@ -10,11 +12,15 @@ import com.gomsoo.shaken.core.network.model.NetworkCocktailItem
 import com.gomsoo.shaken.core.network.model.asModel
 import com.gomsoo.shaken.core.network.model.asSimpleModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
+import java.time.Instant
 import javax.inject.Inject
 
 internal class DefaultCocktailRepository @Inject constructor(
     private val network: CocktailNetworkDataSource,
+    private val favoriteDao: FavoriteCocktailDao,
     @Dispatcher(ShakenDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : CocktailRepository {
 
@@ -33,5 +39,18 @@ internal class DefaultCocktailRepository @Inject constructor(
 
     override suspend fun getDetail(id: String): Cocktail? = withContext(ioDispatcher) {
         network.getCocktail(id)?.asModel()
+    }
+
+    override fun getFavoriteCocktailIds(): Flow<Set<String>> = favoriteDao.getAllIds()
+        .mapLatest { it.toSet() }
+
+    override suspend fun setFavorite(cocktailId: String, isFavorite: Boolean) {
+        withContext(ioDispatcher) {
+            if (isFavorite) {
+                favoriteDao.insertOrIgnore(FavoriteCocktailEntity(cocktailId, Instant.now()))
+            } else {
+                favoriteDao.delete(cocktailId)
+            }
+        }
     }
 }

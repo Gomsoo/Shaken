@@ -7,6 +7,7 @@
 - [ ] Build guide
 - [ ] App Bar
 - [ ] 키보드 팝업 시 Status Bar 영역으로 컨텐츠가 보이는 현상
+- [ ] 다크모드 호환성
 - [ ] Material Theme Builder
 - [ ] core:data module test code
 - [ ] core:database module test code
@@ -16,10 +17,11 @@
 - [x] 검색 시 시작단어 검색으로 API 변경
 - [x] 카테고리
 - [x] 썸네일
-- [ ] 즐겨찾기
+- [x] 즐겨찾기
 - [ ] 검색어 클리어 버튼
-- [ ] 검색 결과 텍스트 하이라이트
 - [ ] 즐겨 찾기 목록 조회 화면 추가
+- [ ] 검색 결과 텍스트 하이라이트
+- [ ] 첫 진입 시 로딩 인디케이터 추가
 
 ### Detail
 - [x] 필수 정보

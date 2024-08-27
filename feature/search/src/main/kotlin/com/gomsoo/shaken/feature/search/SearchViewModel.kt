@@ -1,8 +1,9 @@
 package com.gomsoo.shaken.feature.search
 
+import androidx.lifecycle.viewModelScope
 import com.gomsoo.shaken.core.data.repository.CocktailRepository
 import com.gomsoo.shaken.core.extension.combine
-import com.gomsoo.shaken.core.model.data.SimpleCocktail
+import com.gomsoo.shaken.core.model.data.SimpleCocktailWithFavorite
 import com.gomsoo.shaken.core.ui.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.FlowPreview
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -26,10 +28,21 @@ class SearchViewModel @Inject constructor(
         this.keyword.update { keyword }
     }
 
+    private val favoriteCocktailIds: StateFlow<Set<String>> = cocktailRepository
+        .getFavoriteCocktailIds()
+        .stateIn(emptySet())
+
+    fun setFavorite(item: SimpleCocktailWithFavorite) {
+        viewModelScope.launch {
+            cocktailRepository.setFavorite(item.cocktail.id, !item.isFavorite)
+        }
+    }
+
     /**
      * 시작 '단어'로 검색이 불가능하여 한 글자 이상 입력한 경우 이름 검색으로 대체
      */
-    private val searched: StateFlow<List<SimpleCocktail>> = keyword.debounce(800.milliseconds)
+    private val searched: StateFlow<List<SimpleCocktailWithFavorite>> = keyword
+        .debounce(800.milliseconds)
         .map { it.trim() }
         .map { keyword ->
             when {
@@ -37,6 +50,10 @@ class SearchViewModel @Inject constructor(
                 keyword.length == 1 -> cocktailRepository.searchStartWith(keyword)
                 else -> cocktailRepository.search(keyword)
             }
+        }
+        .combine(favoriteCocktailIds)
+        .map { (cocktails, ids) ->
+            cocktails.map { cocktail -> SimpleCocktailWithFavorite(cocktail, cocktail.id in ids) }
         }
         .stateIn(emptyList())
 

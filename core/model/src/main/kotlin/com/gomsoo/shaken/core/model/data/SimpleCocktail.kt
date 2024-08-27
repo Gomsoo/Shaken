@@ -6,3 +6,5 @@ data class SimpleCocktail(
     val thumbnailUrl: String?,
     val category: String?
 )
+
+data class SimpleCocktailWithFavorite(val cocktail: SimpleCocktail, val isFavorite: Boolean)

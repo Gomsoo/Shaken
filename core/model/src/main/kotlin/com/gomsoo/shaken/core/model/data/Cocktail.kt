@@ -13,5 +13,8 @@ data class Cocktail(
     val imageSource: String?,
     val imageAttribution: String?,
     val creativeCommonsConfirmed: String?,
-    val updatedAt: String?,
+    /**
+     * TODO JSR-310
+     */
+    val updatedAt: String?
 )
