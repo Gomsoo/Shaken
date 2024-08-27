@@ -2,45 +2,49 @@ package com.gomsoo.shaken.feature.detail
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.gomsoo.shaken.core.model.data.Cocktail
+import com.gomsoo.shaken.core.model.data.CocktailWithFavorite
 
-class CocktailPreviewParameterProvider : PreviewParameterProvider<Cocktail> {
+class CocktailPreviewParameterProvider : PreviewParameterProvider<CocktailWithFavorite> {
 
-    override val values: Sequence<Cocktail> = sequenceOf(
-        Cocktail(
-            id = "11000",
-            name = "Martini",
-            thumbnailUrl = "https://picsum.photos/200/300",
-            category = "Cocktail",
-            alcoholic = "Alcoholic",
-            glass = "Highball glass",
-            tags = listOf(
-                "IBA",
-                "ContemporaryClassic",
-                "Alcoholic",
-                "USA",
-                "Asia",
-                "Vegan",
-                "Citrus",
-                "Brunch",
-                "Hangover",
-                "Mild"
+    override val values: Sequence<CocktailWithFavorite> = sequenceOf(
+        CocktailWithFavorite(
+            cocktail = Cocktail(
+                id = "11000",
+                name = "Martini",
+                thumbnailUrl = "https://picsum.photos/200/300",
+                category = "Cocktail",
+                alcoholic = "Alcoholic",
+                glass = "Highball glass",
+                tags = listOf(
+                    "IBA",
+                    "ContemporaryClassic",
+                    "Alcoholic",
+                    "USA",
+                    "Asia",
+                    "Vegan",
+                    "Citrus",
+                    "Brunch",
+                    "Hangover",
+                    "Mild"
+                ),
+                ingredients = listOf(
+                    "2-3 oz Light rum",
+                    "Juice of 1 Lime",
+                    "2 tsp Sugar",
+                    "2-4 Mint",
+                    "Soda water"
+                ),
+                instructions = mapOf(
+                    "EN" to "Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.",
+                    "DE" to "Minzblätter mit Zucker und Limettensaft verrühren. Füge einen Spritzer Sodawasser hinzu und fülle das Glas mit gebrochenem Eis. Den Rum eingießen und mit Sodawasser übergießen. Garnieren und mit einem Strohhalm servieren.",
+                    "IT" to "Pestare le foglie di menta con lo zucchero e il succo di lime.\r\nAggiungere una spruzzata di acqua di seltz e riempi il bicchiere con ghiaccio tritato.\r\nVersare il rum e riempire con acqua di seltz.\r\nGuarnire con una fetta di lime, servire con una cannuccia."
+                ),
+                imageSource = "https://pixabay.com/photos/cocktail-mojito-cocktail-recipe-5096281/",
+                imageAttribution = "anilaha https://pixabay.com/users/anilaha-16242978/",
+                creativeCommonsConfirmed = "Yes",
+                updatedAt = "2016-11-04 09:17:09"
             ),
-            ingredients = listOf(
-                "2-3 oz Light rum",
-                "Juice of 1 Lime",
-                "2 tsp Sugar",
-                "2-4 Mint",
-                "Soda water"
-            ),
-            instructions = mapOf(
-                "EN" to "Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw.",
-                "DE" to "Minzblätter mit Zucker und Limettensaft verrühren. Füge einen Spritzer Sodawasser hinzu und fülle das Glas mit gebrochenem Eis. Den Rum eingießen und mit Sodawasser übergießen. Garnieren und mit einem Strohhalm servieren.",
-                "IT" to "Pestare le foglie di menta con lo zucchero e il succo di lime.\r\nAggiungere una spruzzata di acqua di seltz e riempi il bicchiere con ghiaccio tritato.\r\nVersare il rum e riempire con acqua di seltz.\r\nGuarnire con una fetta di lime, servire con una cannuccia."
-            ),
-            imageSource = "https://pixabay.com/photos/cocktail-mojito-cocktail-recipe-5096281/",
-            imageAttribution = "anilaha https://pixabay.com/users/anilaha-16242978/",
-            creativeCommonsConfirmed = "Yes",
-            updatedAt = "2016-11-04 09:17:09"
+            isFavorite = true
         )
     )
 }

@@ -18,3 +18,5 @@ data class Cocktail(
      */
     val updatedAt: String?
 )
+
+data class CocktailWithFavorite(val cocktail: Cocktail, val isFavorite: Boolean)

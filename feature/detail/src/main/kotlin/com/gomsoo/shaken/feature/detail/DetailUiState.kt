@@ -1,6 +1,6 @@
 package com.gomsoo.shaken.feature.detail
 
-import com.gomsoo.shaken.core.model.data.Cocktail
+import com.gomsoo.shaken.core.model.data.CocktailWithFavorite
 
 sealed interface DetailUiState {
 
@@ -9,5 +9,5 @@ sealed interface DetailUiState {
     data object InvalidId : DetailUiState
     data object InvalidResult : DetailUiState
 
-    data class Success(val cocktail: Cocktail) : DetailUiState
+    data class Success(val cocktail: CocktailWithFavorite) : DetailUiState
 }

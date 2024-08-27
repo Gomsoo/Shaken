@@ -34,7 +34,7 @@ class SearchViewModel @Inject constructor(
 
     fun setFavorite(item: SimpleCocktailWithFavorite) {
         viewModelScope.launch {
-            cocktailRepository.setFavorite(item.cocktail.id, !item.isFavorite)
+            cocktailRepository.setFavorite(item)
         }
     }
 

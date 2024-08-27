@@ -3,7 +3,9 @@ package com.gomsoo.shaken.core.data.repository
 import com.gomsoo.shaken.core.database.dao.FavoriteCocktailDao
 import com.gomsoo.shaken.core.database.model.FavoriteCocktailEntity
 import com.gomsoo.shaken.core.model.data.Cocktail
+import com.gomsoo.shaken.core.model.data.CocktailWithFavorite
 import com.gomsoo.shaken.core.model.data.SimpleCocktail
+import com.gomsoo.shaken.core.model.data.SimpleCocktailWithFavorite
 import com.gomsoo.shaken.core.network.CocktailNetworkDataSource
 import com.gomsoo.shaken.core.network.Dispatcher
 import com.gomsoo.shaken.core.network.ShakenDispatchers
@@ -44,7 +46,10 @@ internal class DefaultCocktailRepository @Inject constructor(
     override fun getFavoriteCocktailIds(): Flow<Set<String>> = favoriteDao.getAllIds()
         .mapLatest { it.toSet() }
 
-    override suspend fun setFavorite(cocktailId: String, isFavorite: Boolean) {
+    /**
+     * @param isFavorite 현재 값이 아닌 저장할 값. [cocktailId]를 [isFavorite]'으로' 저장
+     */
+    private suspend fun setFavorite(cocktailId: String, isFavorite: Boolean) {
         withContext(ioDispatcher) {
             if (isFavorite) {
                 favoriteDao.insertOrIgnore(FavoriteCocktailEntity(cocktailId, Instant.now()))
@@ -52,5 +57,13 @@ internal class DefaultCocktailRepository @Inject constructor(
                 favoriteDao.delete(cocktailId)
             }
         }
+    }
+
+    override suspend fun setFavorite(item: SimpleCocktailWithFavorite) {
+        setFavorite(item.cocktail.id, !item.isFavorite)
+    }
+
+    override suspend fun setFavorite(item: CocktailWithFavorite) {
+        setFavorite(item.cocktail.id, !item.isFavorite)
     }
 }

@@ -37,8 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gomsoo.shaken.core.designsystem.component.AsyncImage
+import com.gomsoo.shaken.core.designsystem.component.FavoriteButton
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
-import com.gomsoo.shaken.core.model.data.Cocktail
+import com.gomsoo.shaken.core.model.data.CocktailWithFavorite
 
 @Composable
 fun DetailRoute(
@@ -46,11 +47,15 @@ fun DetailRoute(
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val detailUiState by viewModel.detailUiState.collectAsStateWithLifecycle()
-    DetailScreen(detailUiState, modifier)
+    DetailScreen(detailUiState, viewModel::setFavorite, modifier)
 }
 
 @Composable
-internal fun DetailScreen(detailUiState: DetailUiState, modifier: Modifier = Modifier) {
+internal fun DetailScreen(
+    detailUiState: DetailUiState,
+    onFavoriteClick: (CocktailWithFavorite) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
         modifier = modifier
             .background(MaterialTheme.colorScheme.onBackground.copy(alpha = 0.06f))
@@ -60,7 +65,11 @@ internal fun DetailScreen(detailUiState: DetailUiState, modifier: Modifier = Mod
             is DetailUiState.Initial -> InitialState(modifier)
             is DetailUiState.InvalidId -> EmptyState(modifier)
             is DetailUiState.InvalidResult -> EmptyState(modifier)
-            is DetailUiState.Success -> CocktailDetail(detailUiState.cocktail, modifier)
+            is DetailUiState.Success -> CocktailDetail(
+                detailUiState.cocktail,
+                onFavoriteClick,
+                modifier
+            )
         }
     }
 }
@@ -101,7 +110,12 @@ private fun EmptyState(modifier: Modifier = Modifier) {
  *   - Move to core:ui
  */
 @Composable
-private fun CocktailDetail(cocktail: Cocktail, modifier: Modifier = Modifier) {
+private fun CocktailDetail(
+    cocktailWithFavorite: CocktailWithFavorite,
+    onFavoriteClick: (CocktailWithFavorite) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val (cocktail, isFavorite) = cocktailWithFavorite
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -115,7 +129,19 @@ private fun CocktailDetail(cocktail: Cocktail, modifier: Modifier = Modifier) {
                     .background(MaterialTheme.colorScheme.background)
                     .padding(16.dp)
             ) {
-                Text(cocktail.name, style = MaterialTheme.typography.headlineSmall)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        cocktail.name,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = modifier
+                            .weight(1f)
+                            .fillMaxWidth()
+                    )
+                    FavoriteButton(
+                        isSelected = isFavorite,
+                        onClick = { onFavoriteClick(cocktailWithFavorite) }
+                    )
+                }
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     val category = cocktail.category
                     val alcoholic = cocktail.alcoholic
@@ -144,10 +170,12 @@ private fun CocktailDetail(cocktail: Cocktail, modifier: Modifier = Modifier) {
 
                 val updatedAt = cocktail.updatedAt
                 if (!updatedAt.isNullOrBlank()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
-                    ) {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            "Latest Update ",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = Color(0xFF888888)
+                        )
                         Text(
                             updatedAt,
                             style = MaterialTheme.typography.bodySmall,
@@ -286,9 +314,9 @@ private fun EmptyStatePreview() {
 @Composable
 private fun CocktailsPreview(
     @PreviewParameter(CocktailPreviewParameterProvider::class)
-    cocktail: Cocktail
+    cocktail: CocktailWithFavorite
 ) {
     ShakenTheme {
-        CocktailDetail(cocktail = cocktail)
+        CocktailDetail(cocktail, {})
     }
 }
