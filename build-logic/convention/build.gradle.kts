@@ -41,6 +41,7 @@ dependencies {
     compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.room.gradlePlugin)
     implementation(libs.truth)
 }
 
@@ -84,6 +85,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = "shaken.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("androidRoom") {
+            id = "shaken.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
         }
     }
 }

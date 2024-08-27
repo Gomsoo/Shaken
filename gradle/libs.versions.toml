@@ -23,6 +23,7 @@ okhttp = "4.12.0"
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 coil = "2.6.0"
+room = "2.6.1"
 
 [bundles]
 androidx-compose-ui-test = ["androidx-compose-ui-test", "androidx-compose-ui-test-manifest"]
@@ -63,6 +64,9 @@ retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "re
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -70,6 +74,7 @@ android-tools-common = { group = "com.android.tools", name = "common", version.r
 compose-gradlePlugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -83,6 +88,7 @@ dependencyGuard = { id = "com.dropbox.dependency-guard", version.ref = "dependen
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+room = { id = "androidx.room", version.ref = "room" }
 
 # Plugins defined by this project
 shaken-android-application-compose = { id = "shaken.android.application.compose", version = "unspecified" }
@@ -93,3 +99,4 @@ shaken-android-feature = { id = "shaken.android.feature", version = "unspecified
 shaken-android-test = { id = "shaken.android.test", version = "unspecified" }
 shaken-hilt = { id = "shaken.hilt", version = "unspecified" }
 shaken-jvm-library = { id = "shaken.jvm.library", version = "unspecified" }
+shaken-android-room = { id = "shaken.android.room", version = "unspecified" }

@@ -9,6 +9,7 @@
 - [ ] 키보드 팝업 시 Status Bar 영역으로 컨텐츠가 보이는 현상
 - [ ] Material Theme Builder
 - [ ] core:data module test code
+- [ ] core:database module test code
 
 ### Search
 - [x] 알콜 성분 목록으로 기본화면 변경
