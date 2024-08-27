@@ -1,5 +1,8 @@
 package com.gomsoo.shaken.feature.search
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,6 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -29,6 +34,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.gomsoo.shaken.core.designsystem.component.AsyncImage
 import com.gomsoo.shaken.core.designsystem.component.FavoriteButton
+import com.gomsoo.shaken.core.designsystem.icon.ShakenIcons
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
 import com.gomsoo.shaken.core.model.data.SimpleCocktailWithFavorite
 
@@ -42,9 +48,10 @@ fun SearchRoute(
     SearchScreen(
         searchUiState = searchUiState,
         modifier = modifier,
-        onInputTextChange = viewModel::setKeyword,
         onItemClick = onItemClick,
-        onFavoriteClick = viewModel::setFavorite
+        onFavoriteClick = viewModel::setFavorite,
+        onInputTextChange = viewModel::setKeyword,
+        onInputTextClear = { viewModel.setKeyword("") }
     )
 }
 
@@ -52,9 +59,10 @@ fun SearchRoute(
 internal fun SearchScreen(
     searchUiState: SearchUiState,
     modifier: Modifier = Modifier,
-    onInputTextChange: (String) -> Unit,
     onItemClick: (String) -> Unit,
-    onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit
+    onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit,
+    onInputTextChange: (String) -> Unit,
+    onInputTextClear: () -> Unit
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         Box(modifier = Modifier.weight(1f)) {
@@ -70,18 +78,8 @@ internal fun SearchScreen(
             }
         }
 
-        SearchInput(searchUiState.keyword, onInputTextChange)
+        SearchInput(searchUiState.keyword, onInputTextChange, onInputTextClear)
     }
-}
-
-@Composable
-fun SearchInput(text: String, onTextChange: (String) -> Unit) {
-    TextField(
-        value = text,
-        onValueChange = onTextChange,
-        placeholder = { Text(stringResource(R.string.feature_search_input_placeholder)) },
-        modifier = Modifier.fillMaxWidth()
-    )
 }
 
 @Composable
@@ -163,6 +161,23 @@ private fun Cocktails(
     }
 }
 
+@Composable
+fun SearchInput(text: String, onTextChange: (String) -> Unit, onClearClick: () -> Unit) {
+    TextField(
+        value = text,
+        onValueChange = onTextChange,
+        placeholder = { Text(stringResource(R.string.feature_search_input_placeholder)) },
+        modifier = Modifier.fillMaxWidth(),
+        trailingIcon = {
+            AnimatedVisibility(visible = text.isNotEmpty(), enter = fadeIn(), exit = fadeOut()) {
+                IconButton(onClick = onClearClick) {
+                    Icon(ShakenIcons.Clear, contentDescription = null)
+                }
+            }
+        }
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun InitialStatePreview() {
@@ -187,5 +202,21 @@ private fun CocktailsPreview(
 ) {
     ShakenTheme {
         Cocktails(cocktails = cocktails, onItemClick = {}, onFavoriteClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchInputPreview() {
+    ShakenTheme {
+        SearchInput("", {}, {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun SearchInputTextPreview() {
+    ShakenTheme {
+        SearchInput("Marga", {}, {})
     }
 }
