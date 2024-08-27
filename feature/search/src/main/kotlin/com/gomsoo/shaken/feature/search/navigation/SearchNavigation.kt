@@ -8,7 +8,9 @@ import com.gomsoo.shaken.feature.search.SearchRoute
 
 const val SEARCH_ROUTE = "search_route"
 
-fun NavController.navigateToSearch(navOptions: NavOptions) = navigate(SEARCH_ROUTE, navOptions)
+fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
+    navigate(SEARCH_ROUTE, navOptions)
+}
 
 fun NavGraphBuilder.searchScreen(onItemClick: (String) -> Unit) {
     composable(route = SEARCH_ROUTE) {

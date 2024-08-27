@@ -20,7 +20,7 @@ fun FavoriteButton(
         modifier = modifier
     ) {
         Icon(
-            imageVector = ShakenIcons.RoundedStar,
+            imageVector = ShakenIcons.Star,
             contentDescription = null,
             tint = if (isSelected) Color.Blue else Color.Gray
         )

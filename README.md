@@ -4,6 +4,7 @@
 ## TODO
 
 ### Common
+- [ ] Update navigation graph
 - [ ] Build guide
 - [ ] App Bar
 - [ ] 키보드 팝업 시 Status Bar 영역으로 컨텐츠가 보이는 현상
@@ -30,3 +31,4 @@
   - [x] 제품 상세 내용 최대한 표현
   - [x] 모든 외국어 명세 표현
 - [x] 즐겨찾기 기능
+- [ ] 바텀시트

@@ -6,14 +6,23 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
+import com.gomsoo.shaken.feature.search.navigation.navigateToSearch
 import com.gomsoo.shaken.navigation.ShakenNavHost
+import com.gomsoo.shaken.navigation.TopLevelDestination
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,11 +32,39 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ShakenTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    ShakenNavHost(
-                        navController = rememberNavController(),
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                var currentDestination by rememberSaveable {
+                    mutableStateOf(TopLevelDestination.SEARCH)
+                }
+                val navController = rememberNavController()
+                NavigationSuiteScaffold(
+                    navigationSuiteItems = {
+                        TopLevelDestination.entries.forEach {
+                            item(
+                                icon = {
+                                    Icon(
+                                        it.defaultIcon,
+                                        contentDescription = stringResource(id = it.textId)
+                                    )
+                                },
+                                label = { Text(stringResource(id = it.textId)) },
+                                selected = currentDestination == it,
+                                onClick = {
+                                    currentDestination = it
+                                    when (it) {
+                                        TopLevelDestination.SEARCH -> navController.navigateToSearch()
+                                        TopLevelDestination.VIDEO -> navController.navigateToSearch()
+                                    }
+                                }
+                            )
+                        }
+                    }
+                ) {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        ShakenNavHost(
+                            navController = navController,
+                            modifier = Modifier.padding(innerPadding)
+                        )
+                    }
                 }
             }
         }

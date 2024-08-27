@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material3.navigationSuite)
 
     ksp(libs.hilt.compiler)
 
