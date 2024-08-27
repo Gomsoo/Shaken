@@ -8,6 +8,7 @@ import com.gomsoo.shaken.feature.detail.navigation.detailScreen
 import com.gomsoo.shaken.feature.detail.navigation.navigateToDetail
 import com.gomsoo.shaken.feature.search.navigation.SEARCH_ROUTE
 import com.gomsoo.shaken.feature.search.navigation.searchScreen
+import com.gomsoo.shaken.feature.video.navigation.videoScreen
 
 @Composable
 fun ShakenNavHost(
@@ -22,5 +23,6 @@ fun ShakenNavHost(
     ) {
         searchScreen(onItemClick = navController::navigateToDetail)
         detailScreen()
+        videoScreen()
     }
 }

@@ -8,6 +8,7 @@
 - [ ] Build guide
 - [ ] App Bar
 - [ ] 키보드 팝업 시 Status Bar 영역으로 컨텐츠가 보이는 현상
+- [ ] REST API 에러 핸들링
 - [ ] 다크모드 호환성
 - [ ] Material Theme Builder
 - [ ] core:data module test code
@@ -32,3 +33,9 @@
   - [x] 모든 외국어 명세 표현
 - [x] 즐겨찾기 기능
 - [ ] 바텀시트
+
+
+### Video
+- [ ] 코드 정리
+- [ ] loading state
+- [ ] 텍스트 스타일링

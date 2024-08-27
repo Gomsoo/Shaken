@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
 import com.gomsoo.shaken.feature.search.navigation.navigateToSearch
+import com.gomsoo.shaken.feature.video.navigation.navigateToVideo
 import com.gomsoo.shaken.navigation.ShakenNavHost
 import com.gomsoo.shaken.navigation.TopLevelDestination
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +53,7 @@ class MainActivity : ComponentActivity() {
                                     currentDestination = it
                                     when (it) {
                                         TopLevelDestination.SEARCH -> navController.navigateToSearch()
-                                        TopLevelDestination.VIDEO -> navController.navigateToSearch()
+                                        TopLevelDestination.VIDEO -> navController.navigateToVideo()
                                     }
                                 }
                             )

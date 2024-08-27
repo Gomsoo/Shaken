@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalLayoutApi::class)
-
 package com.gomsoo.shaken.feature.detail
 
 import androidx.compose.foundation.background
@@ -109,6 +107,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
  *   - Extract string resources
  *   - Move to core:ui
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun CocktailDetail(
     cocktailWithFavorite: CocktailWithFavorite,

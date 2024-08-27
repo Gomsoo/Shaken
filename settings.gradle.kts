@@ -33,6 +33,8 @@ include(":core:designsystem")
 include(":core:ui")
 include(":core:network")
 include(":core:database")
+include(":core:asset")
 
 include(":feature:search")
 include(":feature:detail")
+include(":feature:video")

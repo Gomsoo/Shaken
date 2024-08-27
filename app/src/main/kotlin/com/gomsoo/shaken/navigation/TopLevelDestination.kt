@@ -22,6 +22,6 @@ enum class TopLevelDestination(
     VIDEO(
         defaultIcon = ShakenIcons.PlayCircle,
         selectedIcon = ShakenIcons.OutlinedPlayCircle,
-        textId = com.gomsoo.shaken.feature.search.R.string.feature_video_title // TODO Move string resource to video module
+        textId = com.gomsoo.shaken.feature.video.R.string.feature_video_title
     )
 }
