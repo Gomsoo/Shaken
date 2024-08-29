@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -29,7 +30,6 @@ import com.gomsoo.shaken.core.designsystem.icon.ShakenIcons
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
 import com.gomsoo.shaken.core.model.data.CocktailWithFavorite
 import com.gomsoo.shaken.core.model.data.SimpleCocktail
-import com.gomsoo.shaken.core.model.data.SimpleCocktailWithFavorite
 import com.gomsoo.shaken.core.ui.CocktailItem
 import com.gomsoo.shaken.core.ui.DetailCocktailCardBottomSheet
 
@@ -57,7 +57,7 @@ internal fun SearchScreen(
     searchUiState: SearchUiState,
     modifier: Modifier = Modifier,
     onItemClick: (String, SimpleCocktail) -> Unit,
-    onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit,
+    onFavoriteClick: (SearchUiState.Item) -> Unit,
     onDetailFavoriteClick: (CocktailWithFavorite) -> Unit,
     onDismissRequest: () -> Unit,
     onInputTextChange: (String) -> Unit,
@@ -71,7 +71,6 @@ internal fun SearchScreen(
                 is SearchUiState.Success -> {
                     Cocktails(
                         cocktails = searchUiState.cocktails,
-                        keyword = searchUiState.keyword,
                         modifier = modifier,
                         onItemClick = onItemClick,
                         onFavoriteClick = onFavoriteClick
@@ -94,13 +93,11 @@ internal fun SearchScreen(
 
 @Composable
 private fun InitialState(modifier: Modifier = Modifier) {
-    Column(
+    Box(
         modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = stringResource(R.string.feature_search_initial_emoji))
-        Text(text = stringResource(R.string.feature_search_initial_message))
+        CircularProgressIndicator()
     }
 }
 
@@ -121,11 +118,10 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 
 @Composable
 private fun Cocktails(
-    cocktails: List<SimpleCocktailWithFavorite>,
-    keyword: String,
+    cocktails: List<SearchUiState.Item>,
     modifier: Modifier = Modifier,
     onItemClick: (String, SimpleCocktail) -> Unit,
-    onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit
+    onFavoriteClick: (SearchUiState.Item) -> Unit
 ) {
     Box(modifier = modifier.fillMaxSize()) {
         LazyColumn {
@@ -133,7 +129,7 @@ private fun Cocktails(
                 val (cocktail, isFavorite) = item
                 CocktailItem(
                     cocktail = cocktail,
-                    keyword = keyword,
+                    keyword = item.keyword,
                     onItemClick = { onItemClick(cocktail.id, cocktail) },
                     isFavorite = isFavorite,
                     onFavoriteClick = { onFavoriteClick(item) }
@@ -180,10 +176,10 @@ private fun EmptyStatePreview() {
 @Composable
 private fun CocktailsPreview(
     @PreviewParameter(CocktailsPreviewParameterProvider::class)
-    cocktails: List<SimpleCocktailWithFavorite>
+    cocktails: List<SearchUiState.Item>
 ) {
     ShakenTheme {
-        Cocktails(cocktails = cocktails, "", onItemClick = { _, _ -> }, onFavoriteClick = {})
+        Cocktails(cocktails = cocktails, onItemClick = { _, _ -> }, onFavoriteClick = {})
     }
 }
 

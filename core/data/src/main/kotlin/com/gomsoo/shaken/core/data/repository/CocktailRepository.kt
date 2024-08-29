@@ -19,6 +19,11 @@ interface CocktailRepository {
     fun getFavoriteCocktailIds(): Flow<Set<String>>
 
     /**
+     * @param toFavorite 현재 값이 아닌 저장할 값. [cocktailId]를 [toFavorite]'으로' 저장
+     */
+    suspend fun setFavorite(cocktailId: String, toFavorite: Boolean)
+
+    /**
      * 넘겨받은 아이템의 favorite 여부를 토글시켜줌. 파라미터로 넘겨받은 아이템의 `item.isFavorite`과 반대로 저장
      */
     suspend fun setFavorite(item: SimpleCocktailWithFavorite)

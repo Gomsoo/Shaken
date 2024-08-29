@@ -54,11 +54,8 @@ internal class DefaultCocktailRepository @Inject constructor(
     override fun getFavoriteCocktailIds(): Flow<Set<String>> = favoriteDao.getAllIds()
         .mapLatest { it.toSet() }
 
-    /**
-     * @param isFavorite 현재 값이 아닌 저장할 값. [cocktailId]를 [isFavorite]'으로' 저장
-     */
-    private suspend fun setFavorite(cocktailId: String, isFavorite: Boolean) {
-        if (isFavorite) {
+    override suspend fun setFavorite(cocktailId: String, toFavorite: Boolean) {
+        if (toFavorite) {
             favoriteDao.insertOrIgnore(FavoriteCocktailEntity(cocktailId, Instant.now()))
         } else {
             favoriteDao.delete(cocktailId)

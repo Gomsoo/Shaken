@@ -35,6 +35,12 @@ class SearchViewModel @Inject constructor(
         .getFavoriteCocktailIds()
         .stateIn(emptySet())
 
+    fun setFavorite(item: SearchUiState.Item) {
+        viewModelScope.launch {
+            cocktailRepository.setFavorite(item.cocktail.id, !item.isFavorite)
+        }
+    }
+
     fun setFavorite(item: SimpleCocktailWithFavorite) {
         viewModelScope.launch {
             cocktailRepository.setFavorite(item)
@@ -50,21 +56,29 @@ class SearchViewModel @Inject constructor(
     /**
      * 시작 '단어'로 검색이 불가능하여 한 글자 이상 입력한 경우 이름 검색으로 대체
      */
-    private val searched: StateFlow<List<SimpleCocktailWithFavorite>> = keyword
+    private val searched: StateFlow<List<SearchUiState.Item>?> = keyword
         .debounce(800.milliseconds)
         .map { it.trim() }
-        .map { keyword ->
-            when {
-                keyword.isBlank() -> cocktailRepository.getAlcoholics()
-                keyword.length == 1 -> cocktailRepository.searchStartWith(keyword)
-                else -> cocktailRepository.search(keyword)
-            }
+        .flatMapLatest { keyword ->
+            flowOf(
+                when {
+                    keyword.isBlank() -> cocktailRepository.getAlcoholics()
+                    keyword.length == 1 -> cocktailRepository.searchStartWith(keyword)
+                    else -> cocktailRepository.search(keyword)
+                }
+            )
+                .combine(favoriteCocktailIds)
+                .map { (cocktails, ids) ->
+                    cocktails.map { cocktail ->
+                        SearchUiState.Item(
+                            cocktail = cocktail,
+                            isFavorite = cocktail.id in ids,
+                            keyword = keyword
+                        )
+                    }
+                }
         }
-        .combine(favoriteCocktailIds)
-        .map { (cocktails, ids) ->
-            cocktails.map { cocktail -> SimpleCocktailWithFavorite(cocktail, cocktail.id in ids) }
-        }
-        .stateIn(emptyList())
+        .stateIn(null)
 
     private val detailId = MutableStateFlow<String?>(null)
 
@@ -90,16 +104,16 @@ class SearchViewModel @Inject constructor(
 
     /**
      * TODO Improvement
-     *   - [ ] Fix initial state skipped
-     *   - [ ] Loading state
+     *   - [x] Fix initial state skipped
+     *   - [x] Loading state
      *   - [ ] Caching
      */
     val searchUiState: StateFlow<SearchUiState> = searched.combine(keyword, detail)
         .map { (searched, keyword, detail) ->
-            if (searched.isEmpty()) {
-                SearchUiState.Empty(keyword)
-            } else {
-                SearchUiState.Success(searched, keyword, detail)
+            when {
+                searched == null -> SearchUiState.Initial
+                searched.isEmpty() -> SearchUiState.Empty(keyword)
+                else -> SearchUiState.Success(searched, keyword, detail)
             }
         }
         .stateIn(SearchUiState.Initial)
