@@ -18,7 +18,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
 import com.gomsoo.shaken.feature.favorite.navigation.navigateToFavorite
 import com.gomsoo.shaken.feature.search.navigation.navigateToSearch
@@ -52,10 +54,23 @@ class MainActivity : ComponentActivity() {
                                 selected = currentDestination == it,
                                 onClick = {
                                     currentDestination = it
+
+                                    val navOptions = navOptions {
+                                        popUpTo(navController.graph.findStartDestination().id) {
+                                            saveState = true
+                                        }
+                                        launchSingleTop = true
+                                        restoreState = true
+                                    }
                                     when (it) {
-                                        TopLevelDestination.SEARCH -> navController.navigateToSearch()
-                                        TopLevelDestination.FAVORITE -> navController.navigateToFavorite()
-                                        TopLevelDestination.VIDEO -> navController.navigateToVideo()
+                                        TopLevelDestination.SEARCH ->
+                                            navController.navigateToSearch(navOptions)
+
+                                        TopLevelDestination.FAVORITE ->
+                                            navController.navigateToFavorite(navOptions)
+
+                                        TopLevelDestination.VIDEO ->
+                                            navController.navigateToVideo(navOptions)
                                     }
                                 }
                             )
