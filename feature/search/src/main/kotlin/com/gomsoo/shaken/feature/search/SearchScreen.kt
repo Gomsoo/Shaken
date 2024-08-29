@@ -29,6 +29,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -81,6 +84,7 @@ internal fun SearchScreen(
                 is SearchUiState.Success -> {
                     Cocktails(
                         cocktails = searchUiState.cocktails,
+                        keyword = searchUiState.keyword,
                         modifier = modifier,
                         onItemClick = onItemClick,
                         onFavoriteClick = onFavoriteClick
@@ -134,6 +138,7 @@ private fun EmptyState(modifier: Modifier = Modifier) {
 @Composable
 private fun Cocktails(
     cocktails: List<SimpleCocktailWithFavorite>,
+    keyword: String,
     modifier: Modifier = Modifier,
     onItemClick: (String, SimpleCocktail) -> Unit,
     onFavoriteClick: (SimpleCocktailWithFavorite) -> Unit
@@ -163,7 +168,21 @@ private fun Cocktails(
                             .padding(start = 16.dp),
                         verticalArrangement = Arrangement.Center
                     ) {
-                        Text(text = cocktail.name, style = MaterialTheme.typography.labelLarge)
+                        if (keyword.isBlank()) {
+                            Text(text = cocktail.name, style = MaterialTheme.typography.labelLarge)
+                        } else {
+                            Text(
+                                text = buildAnnotatedString {
+                                    val split = cocktail.name.split(keyword, ignoreCase = true)
+                                    append(split[0])
+                                    withStyle(SpanStyle(color = Color.Red)) {
+                                        append(keyword)
+                                    }
+                                    split.getOrNull(1)?.let(::append)
+                                },
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                        }
                         cocktail.category?.let {
                             Text(
                                 text = it,
@@ -220,7 +239,7 @@ private fun CocktailsPreview(
     cocktails: List<SimpleCocktailWithFavorite>
 ) {
     ShakenTheme {
-        Cocktails(cocktails = cocktails, onItemClick = { _, _ -> }, onFavoriteClick = {})
+        Cocktails(cocktails = cocktails, "", onItemClick = { _, _ -> }, onFavoriteClick = {})
     }
 }
 
