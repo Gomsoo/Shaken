@@ -64,9 +64,9 @@ internal fun DetailScreen(
             is DetailUiState.InvalidId -> EmptyState(modifier)
             is DetailUiState.InvalidResult -> EmptyState(modifier)
             is DetailUiState.Success -> CocktailDetail(
-                detailUiState.cocktail,
-                onFavoriteClick,
-                modifier
+                cocktailWithFavorite = detailUiState.cocktail,
+                onFavoriteClick = onFavoriteClick,
+                modifier = modifier
             )
         }
     }
