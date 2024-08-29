@@ -1,6 +1,8 @@
 # Shaken
 [과제 링크](https://www.notion.so/actionpower/AOS-Type-A-2fd0f57d32a149cebb770fb002501477)
 
+제출용 APK 경로 [바로가기](./submit-apk)
+
 ## Build
 `locol.properties` 파일에 다음을 추가해주세요.
 
