@@ -12,8 +12,8 @@ fun NavController.navigateToSearch(navOptions: NavOptions? = null) {
     navigate(SEARCH_ROUTE, navOptions)
 }
 
-fun NavGraphBuilder.searchScreen(onItemClick: (String) -> Unit) {
+fun NavGraphBuilder.searchScreen() {
     composable(route = SEARCH_ROUTE) {
-        SearchRoute(onItemClick = onItemClick)
+        SearchRoute()
     }
 }

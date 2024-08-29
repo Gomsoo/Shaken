@@ -22,7 +22,7 @@ fun ShakenNavHost(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        searchScreen(onItemClick = navController::navigateToDetail)
+        searchScreen()
         detailScreen()
         favoriteScreen(onItemClick = navController::navigateToDetail)
         videoScreen()
