@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.gomsoo.shaken.feature.detail.navigation.detailScreen
 import com.gomsoo.shaken.feature.detail.navigation.navigateToDetail
+import com.gomsoo.shaken.feature.favorite.navigation.favoriteScreen
 import com.gomsoo.shaken.feature.search.navigation.SEARCH_ROUTE
 import com.gomsoo.shaken.feature.search.navigation.searchScreen
 import com.gomsoo.shaken.feature.video.navigation.videoScreen
@@ -23,6 +24,7 @@ fun ShakenNavHost(
     ) {
         searchScreen(onItemClick = navController::navigateToDetail)
         detailScreen()
+        favoriteScreen(onItemClick = navController::navigateToDetail)
         videoScreen()
     }
 }

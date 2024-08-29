@@ -27,4 +27,6 @@ interface CocktailRepository {
      * 넘겨받은 아이템의 favorite 여부를 토글시켜줌. 파라미터로 넘겨받은 아이템의 `item.isFavorite`과 반대로 저장
      */
     suspend fun setFavorite(item: CocktailWithFavorite)
+
+    fun getFavoriteCocktails(): Flow<List<SimpleCocktail>>
 }

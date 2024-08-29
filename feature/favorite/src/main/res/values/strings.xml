@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_favorite_title">Favorite</string>
+    <string name="feature_favorite_initial_emoji">⭐️</string>
+    <string name="feature_favorite_initial_message">Your favorite cocktails!</string>
+    <string name="feature_favorite_empty_emoji">⛄️</string>
+    <string name="feature_favorite_empty_message">You have no favorite yet!</string>
+</resources>

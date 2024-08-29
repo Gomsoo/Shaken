@@ -20,6 +20,8 @@ dependencies {
     api(projects.core.database)
     api(projects.core.asset)
 
+    implementation(libs.room.ktx)
+
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.kotlinx.serialization.json)
 }

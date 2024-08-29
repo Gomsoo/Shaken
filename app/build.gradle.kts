@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.feature.search)
     implementation(projects.feature.detail)
     implementation(projects.feature.video)
+    implementation(projects.feature.favorite)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)

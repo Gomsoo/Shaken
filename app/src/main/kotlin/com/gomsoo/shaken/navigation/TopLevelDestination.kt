@@ -3,6 +3,9 @@ package com.gomsoo.shaken.navigation
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.gomsoo.shaken.core.designsystem.icon.ShakenIcons
 
+/**
+ * TODO render selected icon
+ */
 enum class TopLevelDestination(
     val defaultIcon: ImageVector,
     val selectedIcon: ImageVector,
@@ -13,12 +16,11 @@ enum class TopLevelDestination(
         selectedIcon = ShakenIcons.OutlinedSearch,
         textId = com.gomsoo.shaken.feature.search.R.string.feature_search_title
     ),
-
-    //    Favorite(
-//        defaultIcon = ShakenIcons.Star,
-//        selectedIcon = ShakenIcons.OutlinedStar,
-//                textId = com.gomsoo.shaken.feature.detail.R.string.feature_detail_title
-//    )
+    FAVORITE(
+        defaultIcon = ShakenIcons.Star,
+        selectedIcon = ShakenIcons.OutlinedStar,
+        textId = com.gomsoo.shaken.feature.favorite.R.string.feature_favorite_title
+    ),
     VIDEO(
         defaultIcon = ShakenIcons.PlayCircle,
         selectedIcon = ShakenIcons.OutlinedPlayCircle,

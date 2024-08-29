@@ -1,8 +1,8 @@
 package com.gomsoo.shaken.core.database.di
 
 import com.gomsoo.shaken.core.database.ShakenDatabase
-import com.gomsoo.shaken.core.database.dao.CocktailDao
 import com.gomsoo.shaken.core.database.dao.FavoriteCocktailDao
+import com.gomsoo.shaken.core.database.dao.SimpleCocktailDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,9 @@ import dagger.hilt.components.SingletonComponent
 internal object DaoModule {
 
     @Provides
-    fun providesCocktailDao(database: ShakenDatabase): CocktailDao = database.cocktailDao()
+    fun providesSimpleCocktailDao(
+        database: ShakenDatabase
+    ): SimpleCocktailDao = database.simpleCocktailDao()
 
     @Provides
     fun providesFavoriteCocktailDao(database: ShakenDatabase): FavoriteCocktailDao =

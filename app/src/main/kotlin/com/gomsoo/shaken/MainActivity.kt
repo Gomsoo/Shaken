@@ -20,6 +20,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
+import com.gomsoo.shaken.feature.favorite.navigation.navigateToFavorite
 import com.gomsoo.shaken.feature.search.navigation.navigateToSearch
 import com.gomsoo.shaken.feature.video.navigation.navigateToVideo
 import com.gomsoo.shaken.navigation.ShakenNavHost
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
                                     currentDestination = it
                                     when (it) {
                                         TopLevelDestination.SEARCH -> navController.navigateToSearch()
+                                        TopLevelDestination.FAVORITE -> navController.navigateToFavorite()
                                         TopLevelDestination.VIDEO -> navController.navigateToVideo()
                                     }
                                 }

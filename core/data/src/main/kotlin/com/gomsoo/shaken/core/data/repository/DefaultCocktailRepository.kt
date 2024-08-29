@@ -1,7 +1,13 @@
 package com.gomsoo.shaken.core.data.repository
 
+import androidx.room.withTransaction
+import com.gomsoo.shaken.core.database.ShakenDatabase
 import com.gomsoo.shaken.core.database.dao.FavoriteCocktailDao
+import com.gomsoo.shaken.core.database.dao.SimpleCocktailDao
 import com.gomsoo.shaken.core.database.model.FavoriteCocktailEntity
+import com.gomsoo.shaken.core.database.model.SimpleCocktailEntity
+import com.gomsoo.shaken.core.database.model.asEntity
+import com.gomsoo.shaken.core.database.model.asModel
 import com.gomsoo.shaken.core.model.data.Cocktail
 import com.gomsoo.shaken.core.model.data.CocktailWithFavorite
 import com.gomsoo.shaken.core.model.data.SimpleCocktail
@@ -22,7 +28,9 @@ import javax.inject.Inject
 
 internal class DefaultCocktailRepository @Inject constructor(
     private val network: CocktailNetworkDataSource,
+    private val simpleCocktailDao: SimpleCocktailDao,
     private val favoriteDao: FavoriteCocktailDao,
+    private val database: ShakenDatabase,
     @Dispatcher(ShakenDispatchers.IO) private val ioDispatcher: CoroutineDispatcher
 ) : CocktailRepository {
 
@@ -50,20 +58,38 @@ internal class DefaultCocktailRepository @Inject constructor(
      * @param isFavorite 현재 값이 아닌 저장할 값. [cocktailId]를 [isFavorite]'으로' 저장
      */
     private suspend fun setFavorite(cocktailId: String, isFavorite: Boolean) {
-        withContext(ioDispatcher) {
-            if (isFavorite) {
-                favoriteDao.insertOrIgnore(FavoriteCocktailEntity(cocktailId, Instant.now()))
-            } else {
-                favoriteDao.delete(cocktailId)
-            }
+        if (isFavorite) {
+            favoriteDao.insertOrIgnore(FavoriteCocktailEntity(cocktailId, Instant.now()))
+        } else {
+            favoriteDao.delete(cocktailId)
+        }
+    }
+
+    private fun insertOrDeleteFavoriteCocktail(
+        entity: SimpleCocktailEntity,
+        isFavorite: Boolean
+    ) {
+        if (isFavorite) {
+            simpleCocktailDao.upsert(entity)
+        } else {
+            simpleCocktailDao.delete(entity)
         }
     }
 
     override suspend fun setFavorite(item: SimpleCocktailWithFavorite) {
-        setFavorite(item.cocktail.id, !item.isFavorite)
+        database.withTransaction {
+            setFavorite(item.cocktail.id, !item.isFavorite)
+            insertOrDeleteFavoriteCocktail(item.cocktail.asEntity(), !item.isFavorite)
+        }
     }
 
     override suspend fun setFavorite(item: CocktailWithFavorite) {
-        setFavorite(item.cocktail.id, !item.isFavorite)
+        database.withTransaction {
+            setFavorite(item.cocktail.id, !item.isFavorite)
+            insertOrDeleteFavoriteCocktail(item.cocktail.asEntity(), !item.isFavorite)
+        }
     }
+
+    override fun getFavoriteCocktails(): Flow<List<SimpleCocktail>> =
+        simpleCocktailDao.getFavoriteCocktails().mapLatest { it.map { it.asModel() } }
 }
