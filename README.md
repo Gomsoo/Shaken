@@ -36,5 +36,6 @@
 
 ### Video
 - [ ] 코드 정리
-- [ ] loading state
-- [ ] 텍스트 스타일링
+- [x] loading state
+- [x] 텍스트 스타일링
+- [ ] 텍스트 자동 스크롤

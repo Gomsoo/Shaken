@@ -98,9 +98,12 @@ fun YouTubePlayer(videoId: String, onReady: () -> Unit, onChanged: (Int, Float, 
                 var player;
                 function onYouTubeIframeAPIReady() {
                     player = new YT.Player('player', {
-                        height: '100%',
+                        height: '390',
                         width: '100%',
                         videoId: '$videoId',
+                        playerVars: {
+                            'playsinline': 1
+                        },
                         events: {
                             'onReady': onPlayerReady,
                             'onStateChange': onPlayerStateChange

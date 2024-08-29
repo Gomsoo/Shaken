@@ -1,6 +1,5 @@
 package com.gomsoo.shaken.feature.video
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,16 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.gomsoo.shaken.core.designsystem.theme.ShakenTheme
+import com.gomsoo.shaken.core.extension.secondsToDurationText
 import com.gomsoo.shaken.core.ui.YouTubePlayer
-import com.gomsoo.shaken.core.ui.YouTubePlayerState
 
 private const val YOUTUBE_VIDEO_ID = "Dd1N9NrPt3A"
 
@@ -60,11 +55,9 @@ internal fun VideoScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             YouTubePlayer(
                 videoId = YOUTUBE_VIDEO_ID,
-                onReady = { isPlayerReady = true }
-            ) { state, d, current ->
-                isPlayerReady = state == YouTubePlayerState.BEFORE_START
-                onPlayerStateChanged(state, d, current)
-            }
+                onReady = { isPlayerReady = true },
+                onChanged = { state, d, current -> onPlayerStateChanged(state, d, current) }
+            )
             Spacer(modifier = modifier.height(20.dp))
 
             if (videoUiState is VideoUiState.Success) {
@@ -81,73 +74,6 @@ internal fun VideoScreen(
 }
 
 @Composable
-fun ComplexStyledText() {
-    val annotatedString = buildAnnotatedString {
-        append("This is ")
-        withStyle(
-            style = SpanStyle(
-                background = Color.Yellow,
-                color = Color.Red,
-                textDecoration = TextDecoration.Underline
-            )
-        ) {
-            append("highlighted")
-        }
-        append(" and ")
-        withStyle(
-            style = SpanStyle(
-                background = Color.Cyan,
-                fontWeight = FontWeight.Bold
-            )
-        ) {
-            append("styled")
-        }
-        append(" text")
-    }
-
-    Text(text = annotatedString)
-}
-
-/**
- * TODO
- */
-@Composable
-private fun InitialState(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "오쉣")
-        Text(text = "시간 없어라")
-    }
-}
-
-/**
- * TODO
- */
-@Composable
-private fun EmptyState(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(text = "OMG")
-        Text(text = "The time is running out")
-    }
-}
-
-@Composable
-private fun Header(text: String, isTopPaddingVisible: Boolean = true) {
-    if (isTopPaddingVisible) {
-        Spacer(modifier = Modifier.height(16.dp))
-    }
-    Text(text, style = MaterialTheme.typography.titleMedium)
-    Spacer(modifier = Modifier.height(4.dp))
-}
-
-@Composable
 private fun Script(script: List<Script>, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
@@ -156,42 +82,38 @@ private fun Script(script: List<Script>, modifier: Modifier = Modifier) {
     ) {
         script.forEach {
             when (it) {
-                is Script.Speaker -> Text("${it.name} ${it.startTimeAsSeconds}")
-                is Script.TextParagraph -> {
-                    Text(buildAnnotatedString {
-                        it.paragraph.forEach { scriptText ->
-                            val background =
-                                if (scriptText.isHighlighted) Color.Cyan else Color.Transparent
-                            withStyle(style = SpanStyle(background = background)) {
-                                append(scriptText.text)
-                            }
-                        }
-                    })
-                }
+                is Script.Speaker -> Speaker(it)
+                is Script.TextParagraph -> TextParagraph(it)
             }
         }
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun InitialStatePreview() {
-    ShakenTheme {
-        InitialState()
-    }
+private fun Speaker(speaker: Script.Speaker) {
+    Spacer(modifier = Modifier.height(24.dp))
+    Text(
+        "${speaker.name} ${speaker.startTimeAsSeconds.secondsToDurationText()}",
+        style = MaterialTheme.typography.titleMedium
+    )
+    Spacer(modifier = Modifier.height(8.dp))
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun EmptyStatePreview() {
-    ShakenTheme {
-        EmptyState()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CocktailsPreview() {
-    ShakenTheme {
-    }
+private fun TextParagraph(textParagraph: Script.TextParagraph) {
+    Text(
+        buildAnnotatedString {
+            textParagraph.paragraph.forEach { scriptText ->
+                val background = if (scriptText.isHighlighted) {
+                    Color(0xFFAABBEE)
+                } else {
+                    Color.Transparent
+                }
+                withStyle(style = SpanStyle(background = background)) {
+                    append(scriptText.text)
+                }
+            }
+        },
+        style = MaterialTheme.typography.bodyMedium
+    )
 }
