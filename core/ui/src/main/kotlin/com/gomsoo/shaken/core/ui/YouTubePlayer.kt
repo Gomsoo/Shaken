@@ -17,10 +17,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 
 private class YouTubePlayerJavascriptInterface(
+    private val onPlayerReady: () -> Unit,
     private val onStateChanged: (Int) -> Unit,
     private val onDurationChanged: (Float) -> Unit,
     private val onCurrentTimeChanged: (Float) -> Unit
 ) {
+    @JavascriptInterface
+    fun onPlayerReady() {
+        onPlayerReady.invoke()
+    }
+
     @JavascriptInterface
     fun onStateChanged(state: Int) {
         onStateChanged.invoke(state)
@@ -76,7 +82,7 @@ object YouTubePlayerState {
  * [YouTube IFrame Player API](https://developers.google.com/youtube/iframe_api_reference#Getting_Started)
  */
 @Composable
-fun YouTubePlayer(videoId: String, onChanged: (Int, Float, Float) -> Unit) {
+fun YouTubePlayer(videoId: String, onReady: () -> Unit, onChanged: (Int, Float, Float) -> Unit) {
     var playerState by remember { mutableIntStateOf(-1) }
     var duration by remember { mutableFloatStateOf(0f) }
     var currentTime by remember { mutableFloatStateOf(0f) }
@@ -102,6 +108,7 @@ fun YouTubePlayer(videoId: String, onChanged: (Int, Float, Float) -> Unit) {
                     });
                 }
                 function onPlayerReady(event) {
+                    AndroidInterface.onPlayerReady();
                     setInterval(updatePlayerInfo, 1000);
                 }
                 function onPlayerStateChange(event) {
@@ -127,6 +134,7 @@ fun YouTubePlayer(videoId: String, onChanged: (Int, Float, Float) -> Unit) {
                     settings.javaScriptEnabled = true
                     settings.mediaPlaybackRequiresUserGesture = false
                     addJavascriptInterface(YouTubePlayerJavascriptInterface(
+                        onPlayerReady = onReady,
                         onStateChanged = {
                             playerState = it
                             onChanged(it, duration, currentTime)
